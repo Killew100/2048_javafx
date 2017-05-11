@@ -8,6 +8,11 @@ import java.util.ArrayList;
  */
 class Game {
     private int num;
+
+    public int[][] getGameBoard() {
+        return gameBoard;
+    }
+
     private int[][] gameBoard;
 
     public GameState getState() {
@@ -70,8 +75,8 @@ class Game {
 
     void pushUp(){
         System.out.println("UP");
-        boolean[] alreadyCombined = new boolean[this.num];
         for(int y = 0; y < this.num; y++){
+            boolean[] alreadyCombined = new boolean[this.num];
             for(int x = 1; x < this.num; x++){
                 if (gameBoard[x][y] != 0){
                     int value = gameBoard[x][y];
@@ -80,20 +85,20 @@ class Game {
                         X--;
                     }
                     if (X == -1){
+                        gameBoard[x][y] = 0;
                         gameBoard[0][y] = value;
-                        gameBoard[x][y] = 0;
                     } else if (gameBoard[X][y] != value){
-                        gameBoard[X+1][y] = value;
                         gameBoard[x][y] = 0;
+                        gameBoard[X+1][y] = value;
                     } else {
                         if(alreadyCombined[X]){
-                            gameBoard[X+1][y] = value;
                             gameBoard[x][y] = 0;
+                            gameBoard[X+1][y] = value;
                         } else {
+                            gameBoard[x][y] = 0;
                             gameBoard[X][y] *= 2;
                             points += gameBoard[X][y];
                             alreadyCombined[X] = true;
-                            gameBoard[x][y] = 0;
                         }
                     }
                 }
@@ -103,8 +108,8 @@ class Game {
 
     void pushDown(){
         System.out.println("DOWN");
-        boolean[] alreadyCombined = new boolean[this.num];
         for(int y = 0; y < this.num; y++){
+            boolean[] alreadyCombined = new boolean[this.num];
             for(int x = this.num - 2; x > -1; x--){
                 if (gameBoard[x][y] != 0){
                     int value = gameBoard[x][y];
@@ -113,20 +118,20 @@ class Game {
                         X++;
                     }
                     if (X == this.num){
+                        gameBoard[x][y] = 0;
                         gameBoard[this.num - 1][y] = value;
-                        gameBoard[x][y] = 0;
                     } else if (gameBoard[X][y] != value){
-                        gameBoard[X-1][y] = value;
                         gameBoard[x][y] = 0;
+                        gameBoard[X-1][y] = value;
                     } else {
                         if(alreadyCombined[X]){
-                            gameBoard[X-1][y] = value;
                             gameBoard[x][y] = 0;
+                            gameBoard[X-1][y] = value;
                         } else {
+                            gameBoard[x][y] = 0;
                             gameBoard[X][y] *= 2;
                             points += gameBoard[X][y];
                             alreadyCombined[X] = true;
-                            gameBoard[x][y] = 0;
                         }
                     }
                 }
@@ -136,8 +141,8 @@ class Game {
     }
     void pushLeft(){
         System.out.println("LEFT");
-        boolean[] alreadyCombined = new boolean[this.num];
         for(int x = 0; x < this.num; x++){
+            boolean[] alreadyCombined = new boolean[this.num];
             for(int y = 1; y < this.num; y++){
                 if (gameBoard[x][y] != 0){
                     int value = gameBoard[x][y];
@@ -146,20 +151,20 @@ class Game {
                         Y--;
                     }
                     if (Y == -1){
+                        gameBoard[x][y] = 0;
                         gameBoard[x][0] = value;
-                        gameBoard[x][y] = 0;
                     } else if (gameBoard[x][Y] != value){
-                        gameBoard[x][Y + 1] = value;
                         gameBoard[x][y] = 0;
+                        gameBoard[x][Y + 1] = value;
                     } else {
                         if(alreadyCombined[Y]){
-                            gameBoard[x][Y + 1] = value;
                             gameBoard[x][y] = 0;
+                            gameBoard[x][Y + 1] = value;
                         } else {
+                            gameBoard[x][y] = 0;
                             gameBoard[x][Y] *= 2;
                             points += gameBoard[x][Y];
                             alreadyCombined[Y] = true;
-                            gameBoard[x][y] = 0;
                         }
                     }
                 }
@@ -170,8 +175,8 @@ class Game {
 
     void pushRight(){
         System.out.println("RIGHT");
-        boolean[] alreadyCombined = new boolean[this.num];
         for(int x = 0; x < this.num; x++){
+            boolean[] alreadyCombined = new boolean[this.num];
             for(int y = this.num - 2; y > -1; y--){
                 if (gameBoard[x][y] != 0){
                     int value = gameBoard[x][y];
@@ -180,20 +185,20 @@ class Game {
                         Y++;
                     }
                     if (Y == this.num){
+                        gameBoard[x][y] = 0;
                         gameBoard[x][this.num - 1] = value;
-                        gameBoard[x][y] = 0;
                     } else if (gameBoard[x][Y] != value){
-                        gameBoard[x][Y - 1] = value;
                         gameBoard[x][y] = 0;
+                        gameBoard[x][Y - 1] = value;
                     } else {
                         if(alreadyCombined[Y]){
-                            gameBoard[x][Y - 1] = value;
                             gameBoard[x][y] = 0;
+                            gameBoard[x][Y - 1] = value;
                         } else {
                             gameBoard[x][Y] *= 2;
+                            gameBoard[x][y] = 0;
                             points += gameBoard[x][Y];
                             alreadyCombined[Y] = true;
-                            gameBoard[x][y] = 0;
                         }
                     }
                 }
@@ -248,7 +253,7 @@ class Game {
             state = GameState.WIN;
         } else if (checkBoardFull()){
             if (checkHasMoves()){
-                state = GameState.CONTINUE
+                state = GameState.CONTINUE;
             } else {
                 state = GameState.LOSE;
             }

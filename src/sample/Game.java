@@ -10,6 +10,11 @@ class Game {
     private int num;
     private int[][] gameBoard;
 
+    public GameState getState() {
+        return state;
+    }
+
+    private GameState state;
     public int getPoints() {
         return points;
     }
@@ -19,6 +24,9 @@ class Game {
     Game(int num){
         this.num = num;
         gameBoard = new int[num][num];
+        addNewNumbers();
+        addNewNumbers();
+        state = GameState.CONTINUE;
     }
 
     private Integer getgameBoardLength(){
@@ -35,6 +43,9 @@ class Game {
     }
 
     void addNewNumbers() {
+        if (checkBoardFull()){
+            return;
+        }
         Random random = new Random();
         ArrayList<Integer> emptyX = new ArrayList<>();
         ArrayList<Integer> emptyY = new ArrayList<>();
@@ -189,6 +200,61 @@ class Game {
 
             }
         }
+    }
+    public boolean checkFor2048(){
+        for (int x = 0; x < getgameBoardLength(); x++){
+            for (int y = 0; y < getgameBoardLength(); y++){
+                if (gameBoard[x][y] == 2048){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public boolean checkBoardFull(){
+        for (int x = 0; x < getgameBoardLength(); x++){
+            for (int y = 0; y < getgameBoardLength(); y++){
+                if (gameBoard[x][y] == 0){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    public boolean checkHasMoves(){
+        for (int x = 0; x < getgameBoardLength(); x++){
+            for (int y = 0; y < getgameBoardLength(); y++) {
+                if (x == 0){
+                    if (y != 0){
+                        if (gameBoard[x][y] == gameBoard[x][y - 1]){
+                            return true;                        }
+                    }
+                } else {
+                    if (y != 0) {
+                        if (gameBoard[x][y] == gameBoard[x][y - 1]){
+                            return true;
+                        }
+                    }
+                    if (gameBoard[x][y] == gameBoard[x - 1][y]){
+                        return true;
+                    }
+                }
+            }
+            }
+            return false;
+    }
+    public void checkState() {
+        if (checkFor2048()){
+            state = GameState.WIN;
+        } else if (checkBoardFull()){
+            if (checkHasMoves()){
+                state = GameState.CONTINUE
+            } else {
+                state = GameState.LOSE;
+            }
+        } else {
+                state = GameState.CONTINUE;
+    }
     }
 
 }
